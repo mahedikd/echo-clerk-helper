@@ -9,7 +9,7 @@ import (
 
 	"github.com/clerk/clerk-sdk-go/v2"
 	"github.com/clerk/clerk-sdk-go/v2/jwt"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type ClerkUserData struct {
@@ -40,7 +40,7 @@ var sessionClaimsFromContext = clerk.SessionClaimsFromContext
 
 func RequireAuth(allowedRoles []string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
+		return func(c *echo.Context) error {
 			claims, ok := sessionClaimsFromContext(c.Request().Context())
 			if !ok {
 				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Unauthorized"})
@@ -63,7 +63,7 @@ func RequireAuth(allowedRoles []string) echo.MiddlewareFunc {
 	}
 }
 
-func GetUserFromContext(c echo.Context) (*ClerkUserData, bool) {
+func GetUserFromContext(c *echo.Context) (*ClerkUserData, bool) {
 	u, ok := c.Request().Context().Value(userDataKey).(*ClerkUserData)
 	return u, ok
 }

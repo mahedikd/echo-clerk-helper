@@ -8,13 +8,12 @@ import (
 	"time"
 
 	"github.com/clerk/clerk-sdk-go/v2"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRequireAuth(t *testing.T) {
 	e := echo.New()
-
 	userID := "user_123"
 	userData := &ClerkUserData{
 		UserID: userID,
@@ -30,13 +29,13 @@ func TestRequireAuth(t *testing.T) {
 	defer func() { sessionClaimsFromContext = origSessionClaimsFromContext }()
 
 	t.Run("Authorized ADMIN", func(t *testing.T) {
-		handler := RequireAuth([]string{"ADMIN"})(func(c echo.Context) error {
+		handler := RequireAuth([]string{"ADMIN"})(func(c *echo.Context) error {
 			return c.String(http.StatusOK, "success")
 		})
 
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
+		c := echo.NewContext(req, rec, e)
 
 		sessionClaimsFromContext = func(ctx context.Context) (*clerk.SessionClaims, bool) {
 			claims := &clerk.SessionClaims{}
@@ -55,13 +54,13 @@ func TestRequireAuth(t *testing.T) {
 	})
 
 	t.Run("Forbidden Wrong Role", func(t *testing.T) {
-		handler := RequireAuth([]string{"OWNER"})(func(c echo.Context) error {
+		handler := RequireAuth([]string{"OWNER"})(func(c *echo.Context) error {
 			return c.String(http.StatusOK, "success")
 		})
 
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
+		c := echo.NewContext(req, rec, e)
 
 		sessionClaimsFromContext = func(ctx context.Context) (*clerk.SessionClaims, bool) {
 			claims := &clerk.SessionClaims{}
@@ -81,7 +80,7 @@ func TestGetUserFromContext(t *testing.T) {
 	t.Run("User data present", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
+		c := echo.NewContext(req, rec, e)
 
 		expected := &ClerkUserData{UserID: "u1", Role: "ADMIN"}
 		ctx := context.WithValue(req.Context(), userDataKey, expected)
