@@ -14,7 +14,7 @@ A lightweight, high-performance Go package for easy Clerk authentication and aut
 ## Installation
 
 ```bash
-go get github.com/mahedikd/clerkhelper
+go get github.com/mahedikd/echo-clerk-helper/v2
 ```
 
 ## Setup & Initialization
@@ -26,7 +26,7 @@ Before using the middleware, you must initialize the package with your desired c
 Call `clerkhelper.Init` in your `main.go`. The `role` field is always extracted by default.
 
 ```go
-import "github.com/mahedikd/clerkhelper"
+import "github.com/mahedikd/echo-clerk-helper/v2"
 import "time"
 
 func main() {
@@ -49,7 +49,7 @@ import (
     "time"
     clerkSDK "github.com/clerk/clerk-sdk-go/v2"
     "github.com/clerk/clerk-sdk-go/v2/jwks"
-    "github.com/mahedikd/clerkhelper"
+    "github.com/mahedikd/echo-clerk-helper/v2"
 )
 
 func main() {
@@ -80,7 +80,7 @@ func main() {
 import (
     "github.com/labstack/echo/v4"
     clerkhttp "github.com/clerk/clerk-sdk-go/v2/http"
-    "github.com/mahedikd/clerkhelper"
+    "github.com/mahedikd/echo-clerk-helper/v2"
 )
 
 func Register(e *echo.Echo) {
