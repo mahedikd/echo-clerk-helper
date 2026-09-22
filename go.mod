@@ -1,4 +1,4 @@
-module github.com/mahedikd/clerkhelper/v2
+module github.com/mahedikd/echo-clerk-helper/v2
 
 go 1.26.2
 
